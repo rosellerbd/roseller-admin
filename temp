@@ -1,0 +1,12 @@
+curl -X POST https://roseller-cdn.rainfowbd-dev.workers.dev/admin/upload \
+  -H "Content-Type: application/json" \
+  -d '{
+    "secret": "roseller_publish_clean_2026_x9k4m7n2",
+    "versionCode": 5,
+    "versionName": "1.0.3",
+    "notes": "Version 1.0.2\n- Testing in-app update notification",
+    "apkUrl": "https://github.com/rosellerbd/roseller-admin/releases/download/v1.0.3-5/app-release.apk"
+  }'
+
+
+  export ADMIN_UPLOAD_SECRET="roseller_publish_clean_2026_x9k4m7n2"

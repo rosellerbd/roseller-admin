@@ -1,92 +1,126 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const { execSync } = require('child_process');
 
-// ============================================================
-// Reads versionCode/versionName from android/app/build.gradle,
-// reads release-notes.txt, base64-encodes the built APK, POSTs
-// everything to the Cloudflare Worker's /admin/upload.
-// ============================================================
-
-const ADMIN_UPLOAD_SECRET = process.env.ADMIN_UPLOAD_SECRET;
-if (!ADMIN_UPLOAD_SECRET) {
-  console.error('');
-  console.error('❌ Missing ADMIN_UPLOAD_SECRET env var.');
-  console.error('');
-  console.error('   Run this once in your shell:');
-  console.error('     export ADMIN_UPLOAD_SECRET="roseller_admin_upload_..."');
-  console.error('   (use the value you set in Cloudflare Worker Secrets)');
-  console.error('');
+const SECRET = process.env.ADMIN_UPLOAD_SECRET;
+if (!SECRET) {
+  console.error('❌ Missing ADMIN_UPLOAD_SECRET env var');
+  console.error('   Run: export ADMIN_UPLOAD_SECRET="your-secret"');
   process.exit(1);
 }
 
-const gradlePath = path.join(__dirname, '..', 'android', 'app', 'build.gradle');
-const notesPath  = path.join(__dirname, '..', 'release-notes.txt');
-const apkPath    = path.join(__dirname, '..', 'android', 'app', 'build', 'outputs', 'apk', 'release', 'app-release.apk');
+const root     = path.join(__dirname, '..');
+const gradle   = path.join(root, 'android', 'app', 'build.gradle');
+const notes    = path.join(root, 'release-notes.txt');
+const apkPath  = path.join(root, 'android', 'app', 'build', 'outputs', 'apk', 'release', 'app-release.apk');
 
-if (!fs.existsSync(gradlePath)) { console.error('❌ Missing:', gradlePath); process.exit(1); }
-if (!fs.existsSync(apkPath))    { console.error('❌ Missing APK at', apkPath, '— run "npm run build:apk" first'); process.exit(1); }
-
-const gradle = fs.readFileSync(gradlePath, 'utf8');
-const versionCodeMatch = gradle.match(/versionCode\s+(\d+)/);
-const versionNameMatch = gradle.match(/versionName\s+"([^"]+)"/);
-
-if (!versionCodeMatch || !versionNameMatch) {
-  console.error('❌ Could not parse versionCode/versionName from build.gradle');
+if (!fs.existsSync(apkPath)) {
+  console.error('❌ APK not built:', apkPath);
+  console.error('   Run: npm run build:apk');
   process.exit(1);
 }
 
-const versionCode = Number(versionCodeMatch[1]);
-const versionName = versionNameMatch[1];
-const notes = fs.existsSync(notesPath) ? fs.readFileSync(notesPath, 'utf8').trim() : '';
-
-const apkSizeMB = (fs.statSync(apkPath).size / 1024 / 1024).toFixed(2);
+const gContent = fs.readFileSync(gradle, 'utf8');
+const vCode = Number(gContent.match(/versionCode\s+(\d+)/)[1]);
+const vName = gContent.match(/versionName\s+"([^"]+)"/)[1];
+const relNotes = fs.existsSync(notes) ? fs.readFileSync(notes, 'utf8').trim() : '';
+const sizeMB = (fs.statSync(apkPath).size / 1024 / 1024).toFixed(2);
 
 console.log('');
-console.log('  versionName:', versionName);
-console.log('  versionCode:', versionCode);
-console.log('  APK size:   ', apkSizeMB, 'MB');
-console.log('  uploading...');
+console.log('  📦 Release: ' + vName + ' (versionCode ' + vCode + ')');
+console.log('  📱 APK:     ' + sizeMB + ' MB');
+console.log('');
 
-const apkBase64 = fs.readFileSync(apkPath).toString('base64');
-const payload = JSON.stringify({
-  secret: ADMIN_UPLOAD_SECRET,
-  versionCode,
-  versionName,
-  notes,
-  apkBase64
-});
+// Resolve GitHub repo
+let repo;
+try {
+  repo = execSync('gh repo view --json nameWithOwner -q .nameWithOwner', { cwd: root, stdio: 'pipe' }).toString().trim();
+} catch (e) {
+  console.error('❌ Not a GitHub repo. Run: gh repo create <name> --public --source=. --push');
+  process.exit(1);
+}
+console.log('  🐙 Repo: ' + repo);
 
-const req = https.request({
-  hostname: 'roseller-cdn.rainfowbd-dev.workers.dev',
-  path: '/admin/upload',
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Content-Length': Buffer.byteLength(payload)
+const tag = 'v' + vName + '-' + vCode;
+console.log('  🏷  Tag:  ' + tag);
+console.log('');
+
+// Create/update release
+console.log('  ⬆  Uploading APK to GitHub Releases...');
+try {
+  try {
+    execSync('gh release create ' + tag + ' --title "v' + vName + '" --notes "' + relNotes.replace(/"/g, '\\"').replace(/\n/g, '\\n') + '"', { cwd: root, stdio: 'pipe' });
+  } catch (e) {
+    // Release may exist
   }
-}, res => {
-  let body = '';
-  res.on('data', c => body += c);
-  res.on('end', () => {
-    if (res.statusCode === 200) {
-      console.log('');
-      console.log('  ✅ Uploaded successfully');
-      console.log('  ', body);
-      console.log('');
-    } else {
-      console.error('');
-      console.error('  ❌ Upload failed (' + res.statusCode + '):', body);
-      console.error('');
-      process.exit(1);
-    }
-  });
-});
+  execSync('gh release upload ' + tag + ' "' + apkPath + '" --clobber', { cwd: root, stdio: 'inherit' });
+  console.log('  ✅ APK uploaded');
+} catch (err) {
+  console.error('❌ GitHub upload failed:', err.message);
+  process.exit(1);
+}
 
-req.on('error', e => {
-  console.error('❌ Network error:', e.message);
+const apkUrl = 'https://github.com/' + repo + '/releases/download/' + tag + '/app-release.apk';
+console.log('  🔗 ' + apkUrl);
+console.log('');
+
+// Verify the URL is reachable before storing it
+console.log('  🔍 Verifying URL is reachable...');
+https.get(apkUrl, (res) => {
+  // 302 from GitHub is normal (redirects to CDN). Any 2xx or 3xx = good.
+  if (res.statusCode >= 200 && res.statusCode < 400) {
+    console.log('  ✅ URL responds: HTTP ' + res.statusCode);
+    res.destroy();
+    publishMetadata(apkUrl);
+  } else {
+    console.error('  ❌ URL returned HTTP ' + res.statusCode);
+    res.resume();
+    process.exit(1);
+  }
+}).on('error', (e) => {
+  console.error('  ❌ URL unreachable: ' + e.message);
   process.exit(1);
 });
 
-req.write(payload);
-req.end();
+function publishMetadata(apkUrl) {
+  console.log('');
+  console.log('  📡 Publishing metadata to Worker...');
+
+  const body = JSON.stringify({
+    secret: SECRET,
+    versionCode: vCode,
+    versionName: vName,
+    notes: relNotes,
+    apkUrl: apkUrl,
+  });
+
+  const req = https.request({
+    hostname: 'roseller-cdn.rainfowbd-dev.workers.dev',
+    path: '/admin/upload',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) },
+  }, (res) => {
+    let out = '';
+    res.on('data', (c) => out += c);
+    res.on('end', () => {
+      if (res.statusCode === 200) {
+        console.log('  ✅ Metadata published');
+        console.log('');
+        console.log('  ═══════════════════════════════════════════════');
+        console.log('   RELEASE LIVE');
+        console.log('   Version:  ' + vName + ' (' + vCode + ')');
+        console.log('   Metadata: https://roseller-cdn.rainfowbd-dev.workers.dev/admin/version.json');
+        console.log('   APK:      https://roseller-cdn.rainfowbd-dev.workers.dev/admin/latest.apk');
+        console.log('  ═══════════════════════════════════════════════');
+        console.log('');
+      } else {
+        console.error('  ❌ Publish failed (' + res.statusCode + '): ' + out);
+        process.exit(1);
+      }
+    });
+  });
+  req.on('error', (e) => { console.error('  ❌ ' + e.message); process.exit(1); });
+  req.write(body);
+  req.end();
+}

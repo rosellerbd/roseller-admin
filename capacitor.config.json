@@ -1,0 +1,34 @@
+{
+  "appId": "com.roseller.admin",
+  "appName": "Roseller Admin",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": true,
+    "backgroundColor": "#0f172a"
+  },
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    },
+    "GoogleAuth": {
+      "scopes": ["profile", "email"],
+      "serverClientId": "713081829403-vmf9s27ik6brfjmt502m05gved477p6o.apps.googleusercontent.com",
+      "forceCodeForRefreshToken": true
+    },
+    "SplashScreen": {
+      "launchShowDuration": 800,
+      "launchAutoHide": true,
+      "backgroundColor": "#0f172a",
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false,
+      "splashFullScreen": true,
+      "splashImmersive": false
+    }
+  }
+}

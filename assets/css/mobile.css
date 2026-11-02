@@ -1,0 +1,562 @@
+/* ============================================================
+   MOBILE OVERRIDES — tables stay tables, scroll when needed
+   Page never overflows horizontally. Modern, comfortable look.
+   ============================================================ */
+
+/* ---------- Global: no horizontal page overflow ---------- */
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+*, *::before, *::after { box-sizing: border-box; }
+img, svg, video, canvas, iframe { max-width: 100%; height: auto; }
+
+@media (max-width: 900px) {
+
+  /* ---------- Layout shell ---------- */
+  .layout, .content-col, .main, #content {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  .main {
+    padding: 14px 12px 80px;
+    width: 100%;
+  }
+
+  button, .btn-primary, .btn-secondary, .btn-danger, .nav-item {
+    min-height: 40px;
+  }
+  * { -webkit-tap-highlight-color: transparent; }
+
+  /* ============================================================
+     TOPBAR
+     ============================================================ */
+  .topbar {
+    padding: 10px 12px;
+    min-height: 56px;
+    gap: 8px;
+  }
+  .tb-title { font-size: 15px; }
+  .tb-sub { font-size: 11px; }
+  .tb-icon-btn, .tb-toggle { width: 38px; height: 38px; }
+  .tb-user-meta { display: none; }
+  .tb-user-btn { padding: 3px; gap: 0; }
+  .tb-user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 12px;
+  }
+  .tb-user-chev { display: none; }
+  .tb-menu { right: 8px; }
+
+  /* ============================================================
+     SIDEBAR
+     ============================================================ */
+  .sidebar { width: 260px; }
+  .sidebar-logo { padding: 4px 18px 20px; }
+  .nav-item { padding: 14px 20px; font-size: 15px; gap: 14px; }
+  .nav-icon svg { width: 20px; height: 20px; }
+  .sidebar-open::after { background: rgba(0,0,0,0.55); }
+
+  /* ============================================================
+     DASHBOARD
+     ============================================================ */
+  .dash-greeting { text-align: left; }
+  .dash-date { font-size: 11.5px; }
+
+  .dash-kpi-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .dash-kpi { padding: 12px 14px; }
+  .dash-kpi-value { font-size: 22px; }
+  .dash-kpi-label { font-size: 10px; }
+  .dash-kpi-sub { font-size: 10.5px; }
+
+  .dash-grid { grid-template-columns: 1fr; gap: 12px; }
+  .dash-quick-actions { grid-template-columns: repeat(2, 1fr); }
+  .dash-quick-btn { padding: 14px 10px; font-size: 11.5px; min-height: 76px; }
+
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .stat-card { padding: 14px; }
+  .stat-value { font-size: 22px; }
+  .stat-label { font-size: 10.5px; }
+  .stat-sub { font-size: 11px; }
+
+  /* Recent Orders cards — 1 per row on mobile */
+  .dash-orders-cards {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  .dash-order-card { padding: 12px 14px !important; }
+  .dash-order-card-id { font-size: 12px !important; }
+  .dash-order-card-row { font-size: 12px !important; }
+  .dash-order-card-label { font-size: 10px !important; }
+  .dash-order-card-value.mono { font-size: 12px !important; }
+
+  /* ============================================================
+     SHARED SCROLL WRAPPERS
+     ============================================================ */
+  .products-scroll,
+  .vendors-scroll,
+  .brands-scroll,
+  .ob-scroll,
+  .users-section {
+    overflow-x: auto !important;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+    border-radius: 10px;
+  }
+  .products-scroll::-webkit-scrollbar,
+  .vendors-scroll::-webkit-scrollbar,
+  .brands-scroll::-webkit-scrollbar,
+  .ob-scroll::-webkit-scrollbar,
+  .users-section::-webkit-scrollbar { height: 8px; }
+  .products-scroll::-webkit-scrollbar-thumb,
+  .vendors-scroll::-webkit-scrollbar-thumb,
+  .brands-scroll::-webkit-scrollbar-thumb,
+  .ob-scroll::-webkit-scrollbar-thumb,
+  .users-section::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 4px;
+  }
+
+  /* ============================================================
+     USERS TABLE — ALWAYS a table, never stacked
+     ============================================================ */
+  .users-table {
+    min-width: 720px !important;
+    table-layout: auto !important;
+    width: 100% !important;
+    display: table !important;
+    font-size: 12.5px;
+  }
+  .users-table thead { display: table-header-group !important; }
+  .users-table tbody { display: table-row-group !important; }
+  .users-table tr    { display: table-row !important; }
+  .users-table th,
+  .users-table td    { display: table-cell !important; }
+
+  .users-table thead th {
+    padding: 10px 12px !important;
+    font-size: 10px !important;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+    background: var(--surface-alt) !important;
+    border-bottom: 1px solid var(--line) !important;
+  }
+  .users-table tbody td {
+    padding: 12px !important;
+    font-size: 12.5px !important;
+    white-space: nowrap;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--line) !important;
+    background: var(--surface) !important;
+  }
+  .users-table tbody tr:hover td {
+    background: var(--surface-alt) !important;
+  }
+  .users-table td.mono {
+    font-size: 11.5px !important;
+    color: var(--muted);
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .users-user { gap: 8px !important; }
+  .users-user-name {
+    font-size: 12.5px !important;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .user-avatar {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 10px !important;
+  }
+  .users-role { font-size: 10px !important; padding: 3px 7px !important; }
+  .users-status { font-size: 10px !important; padding: 3px 7px !important; }
+  .users-table td button {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+    min-height: 0 !important;
+    white-space: nowrap;
+  }
+
+  /* ============================================================
+     ORDERS TABLE — ALWAYS a table, never stacked
+     ============================================================ */
+  .orders-page { padding: 14px 0 0; border-radius: 10px; }
+  .orders-head {
+    padding: 0 12px 12px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .orders-head h1 { font-size: 17px; }
+  .orders-head p { font-size: 11px; }
+  .orders-head-meta { gap: 5px; }
+  .ob-pill { font-size: 10px; padding: 3px 8px; }
+
+  .ob-table {
+    table-layout: auto !important;
+    min-width: 1080px !important;
+    display: table !important;
+    width: 100% !important;
+    font-size: 12px !important;
+  }
+  .ob-table thead { display: table-header-group !important; }
+  .ob-table tbody { display: table-row-group !important; }
+  .ob-table tr    { display: table-row !important; }
+  .ob-table th,
+  .ob-table td    { display: table-cell !important; }
+
+  .ob-table thead th {
+    padding: 10px 12px !important;
+    font-size: 10px !important;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+  }
+  .ob-table tbody td {
+    padding: 12px !important;
+    font-size: 12px !important;
+    white-space: nowrap;
+    overflow: visible;
+    vertical-align: middle;
+  }
+
+  /* Column minimums so nothing gets crushed */
+  .ob-table th.col-order    { min-width: 140px; }
+  .ob-table th.col-cname    { min-width: 130px; }
+  .ob-table th.col-cid      { min-width: 110px; }
+  .ob-table th.col-email    { min-width: 170px; }
+  .ob-table th.col-products { min-width: 180px; }
+  .ob-table th.col-total    { min-width: 90px; text-align: right; }
+  .ob-table th.col-payment  { min-width: 90px; text-align: center; }
+  .ob-table th.col-contact  { min-width: 130px; }
+  .ob-table th.col-address  { min-width: 200px; }
+  .ob-table th.col-status   { min-width: 140px; }
+  .ob-table th.col-actions  { min-width: 60px; }
+
+  .ob-order-id {
+    font-size: 11.5px !important;
+    font-family: ui-monospace, monospace;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .ob-order-date {
+    font-size: 10px !important;
+    color: var(--ob-dim);
+    margin-top: 2px;
+  }
+  .ob-prod-item { font-size: 11.5px !important; }
+  .ob-prod-item .name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+    display: inline-block;
+    vertical-align: bottom;
+  }
+  .ob-prod-item .qty { font-size: 10.5px !important; margin-left: 3px; }
+  .ob-prod-more { font-size: 10px !important; }
+  .ob-cost { font-size: 12px !important; white-space: nowrap; }
+  .ob-pay {
+    display: inline-block !important;
+    font-size: 9.5px !important;
+    padding: 2px 6px !important;
+    margin-top: 4px;
+  }
+  .ob-status-wrap { display: flex; align-items: center; gap: 6px; }
+  .ob-status-dot { width: 7px !important; height: 7px !important; flex-shrink: 0; }
+  .ob-status-select {
+    appearance: none;
+    padding: 5px 22px 5px 8px !important;
+    font-size: 11px !important;
+    min-width: 100px !important;
+    width: auto !important;
+    background-position: right 6px center !important;
+    background-size: 8px !important;
+  }
+  .ob-icon-btn {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+  }
+  .ob-icon-btn svg { width: 14px !important; height: 14px !important; }
+
+  /* ============================================================
+     PRODUCTS / VENDORS / BRANDS — already tables, keep sizing
+     ============================================================ */
+  .products-table { min-width: 900px !important; }
+  .products-table td:nth-child(1) { width: 76px !important; padding: 6px !important; }
+  .product-thumb-wrap,
+  .product-thumb,
+  .product-thumb-fallback {
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 6px;
+  }
+  .product-name {
+    font-size: 12.5px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+  }
+  .product-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+  .product-actions > * {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+    min-height: 0 !important;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .vendors-table { min-width: 820px !important; }
+  .vendors-logo, .vendors-logo-fallback {
+    width: 34px !important;
+    height: 34px !important;
+  }
+  .vendors-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+  .vendors-actions > * {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+    min-height: 0 !important;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .brands-table { min-width: 700px !important; }
+  .brands-logo, .brands-logo-fallback {
+    width: 34px !important;
+    height: 34px !important;
+  }
+  .brands-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+  .brands-actions > * {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+    min-height: 0 !important;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Shared table padding for products/vendors/brands */
+  .products-table th,
+  .vendors-table th,
+  .brands-table th {
+    padding: 10px 12px !important;
+    font-size: 10px !important;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+  }
+  .products-table td,
+  .vendors-table td,
+  .brands-table td {
+    padding: 12px !important;
+    font-size: 12.5px;
+    white-space: nowrap;
+    overflow: visible;
+  }
+
+  /* ============================================================
+     PRODUCT DETAIL
+     ============================================================ */
+  .pd-layout {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .pd-image-col { position: static !important; }
+  .pd-image-main { max-width: 100%; margin: 0 auto; }
+  .pd-price { font-size: 22px !important; }
+  .pd-info-grid {
+    padding: 12px !important;
+    gap: 10px !important;
+  }
+  .pd-info-value { font-size: 12.5px !important; }
+  .pd-chips-row {
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+  .pd-chips-label {
+    min-width: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  /* ============================================================
+     ORDER DETAIL
+     ============================================================ */
+  .od-page { width: 100%; max-width: 100vw; overflow-x: hidden; }
+  .od-body { padding: 14px; gap: 14px; }
+  .od-grid { grid-template-columns: 1fr; gap: 12px; }
+  .od-card { padding: 14px; }
+  .od-head {
+    padding: 12px 14px;
+    gap: 10px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .od-head-left { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .od-back { width: 100%; justify-content: center; }
+  .od-title { font-size: 15px; }
+  .od-items-head { padding: 12px 14px; flex-wrap: wrap; }
+  .od-items-card { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .od-items-table { min-width: 400px !important; }
+  .od-items-table th,
+  .od-items-table td { padding: 10px 12px !important; font-size: 12px; }
+  .od-item-thumb, .od-item-thumb-fallback { width: 40px; height: 40px; }
+  .od-totals { max-width: none; padding: 12px 14px; }
+
+  /* ============================================================
+     PRODUCT FORM
+     ============================================================ */
+  .product-form-dark {
+    padding: 16px 12px;
+    margin: 0 -12px -12px;
+    width: calc(100% + 24px);
+    max-width: 100vw;
+  }
+  .pf-grid { grid-template-columns: 1fr !important; gap: 16px; }
+  .pf-image-card { position: static; max-width: 100%; }
+  .pf-row-2, .pf-row-3 { grid-template-columns: 1fr !important; gap: 10px; }
+  .pf-field input,
+  .pf-field select,
+  .pf-field textarea {
+    font-size: 16px;
+    padding: 12px 14px;
+    width: 100%;
+  }
+  #save-btn {
+    position: fixed;
+    bottom: 14px;
+    right: 14px;
+    z-index: 50;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    padding: 14px 20px !important;
+    font-size: 14px !important;
+    border-radius: 999px;
+  }
+
+  /* ============================================================
+     MODALS
+     ============================================================ */
+  .modal-overlay { padding: 0; align-items: flex-end; }
+  .modal-box {
+    max-width: 100%;
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+    max-height: 90vh;
+    animation: modal-slide-up .22s ease-out;
+  }
+  @keyframes modal-slide-up {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+  .modal-head { padding: 16px; }
+  .modal-body {
+    padding: 16px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .modal-body input,
+  .modal-body textarea,
+  .modal-body select { font-size: 16px; padding: 12px; }
+  .modal-foot {
+    padding: 12px 16px;
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+  .modal-foot button { width: 100%; min-height: 46px; }
+
+  /* ============================================================
+     LOGIN
+     ============================================================ */
+  .login-card { padding: 32px 24px; }
+  .login-logo { width: 72px; height: 72px; margin-bottom: 16px; }
+  .login-card h1 { font-size: 20px; }
+  .login-primary-btn,
+  .login-secondary-btn { min-height: 48px; font-size: 14px; }
+
+  /* ============================================================
+     FILTER TOOLBARS
+     ============================================================ */
+  .users-toolbar, .products-toolbar, .vendors-toolbar, .brands-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .users-tabs, .products-tabs, .vendors-tabs, .brands-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto !important;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100%;
+    padding: 3px;
+    gap: 2px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+    box-sizing: border-box;
+  }
+  .users-tabs::-webkit-scrollbar,
+  .products-tabs::-webkit-scrollbar,
+  .vendors-tabs::-webkit-scrollbar,
+  .brands-tabs::-webkit-scrollbar { height: 4px; }
+  .users-tabs::-webkit-scrollbar-thumb,
+  .products-tabs::-webkit-scrollbar-thumb,
+  .vendors-tabs::-webkit-scrollbar-thumb,
+  .brands-tabs::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 2px;
+  }
+  .users-tabs::-webkit-scrollbar-track,
+  .products-tabs::-webkit-scrollbar-track,
+  .vendors-tabs::-webkit-scrollbar-track,
+  .brands-tabs::-webkit-scrollbar-track { background: transparent; }
+  .users-tab, .products-tab, .vendors-tab, .brands-tab {
+    flex: 0 0 auto;
+    padding: 9px 12px;
+    font-size: 12px;
+    min-height: 38px;
+    white-space: nowrap;
+  }
+  .users-tab-count, .products-tab-count, .vendors-tab-count, .brands-tab-count {
+    font-size: 10px;
+    padding: 1px 5px;
+  }
+  .users-search, .products-search, .vendors-search, .brands-search {
+    min-width: 0;
+    width: 100%;
+    height: 42px;
+  }
+}
+
+/* ---------- Very small screens ---------- */
+@media (max-width: 480px) {
+  .main { padding: 12px 10px 80px; }
+  .dash-kpi-value { font-size: 20px; }
+  .stat-value { font-size: 20px; }
+  .tb-title { font-size: 14px; }
+  .topbar { padding: 8px 10px; }
+  .orders-head h1 { font-size: 16px; }
+  .od-title { font-size: 14px; }
+}

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "713081829403",
+    "project_id": "roseller-rainfow",
+    "storage_bucket": "roseller-rainfow.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:713081829403:android:efe2217bb17cc4ac25e0be",
+        "android_client_info": {
+          "package_name": "com.roseller.admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "713081829403-49bg2624dpksgqna7r8k3jilq58ff2ct.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.roseller.admin",
+            "certificate_hash": "c03d99cedf5665b4e063b103cbe2109e815b10d5"
+          }
+        },
+        {
+          "client_id": "713081829403-ekptlub07ac4j7d6d7a02t4brgpniane.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.roseller.admin",
+            "certificate_hash": "aecff8588774308548905fe2d03dfcfea4fe6b70"
+          }
+        },
+        {
+          "client_id": "713081829403-vmf9s27ik6brfjmt502m05gved477p6o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDr4NibNWp8gXYk5j4C5f_GuErvGl4zUFc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "713081829403-vmf9s27ik6brfjmt502m05gved477p6o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

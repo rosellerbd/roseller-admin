@@ -1,0 +1,25 @@
+{
+  "name": "roseller-admin",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "build:dist": "node copy-static.js",
+    "cap:sync": "npm run build:dist && npx cap sync android",
+    "build:apk": "npm run cap:sync && cd android && ./gradlew assembleRelease",
+    "apk": "npm run build:apk",
+    "upload:apk": "node scripts/upload-admin-apk.js",
+    "release": "npm run build:apk && npm run upload:apk"
+  },
+  "dependencies": {
+    "@codetrix-studio/capacitor-google-auth": "^3.4.0-rc.4",
+    "firebase-admin": "^12.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/assets": "^4.0.0",
+    "@capacitor/browser": "^6.0.3",
+    "@capacitor/cli": "^6.2.0",
+    "@capacitor/core": "^6.2.0"
+  }
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roseller Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#111827">
+  <meta name="color-scheme" content="light dark">
+
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/img/roseller-logo-64x64-transparent.png">
+  <link rel="icon" type="image/png" sizes="128x128" href="assets/img/roseller-logo-128x128-transparent.png">
+  <link rel="icon" type="image/png" sizes="256x256" href="assets/img/roseller-logo-256x256-transparent.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/roseller-logo-256x256-transparent.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Set theme BEFORE CSS loads to prevent flash of wrong theme -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('roseller.theme');
+        if (!t) {
+          t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/orders.css">
+  <link rel="stylesheet" href="assets/css/mobile.css">
+</head>
+<body>
+  <div id="app">Loading…</div>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="js/publish-config.js"></script>
+  <script type="module" src="js/supabase.js"></script>
+  <script type="module" src="js/auth.js"></script>
+  <script src="js/admin-publish.js"></script>
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>
